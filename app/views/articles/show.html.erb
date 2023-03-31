@@ -1,0 +1,23 @@
+<div>
+  <p><strong>Title: </strong><%= @article.title %></p>
+  <p><strong>Body: </strong> <%= @article.body %></p>
+
+</div>
+
+<div>
+  <%= link_to "Edit", edit_article_path(@article) %>
+</div>
+
+<br>
+<div><%= button_to "Delete", @article, method: :delete %></div>
+<br>
+
+<h3>See All Articles with Comments</h3>
+<%= render("articles", articles: Article.all) %>
+
+<h3>Comments on the article</h3>
+<%= render @article.comments %>
+
+<h3> Add a Comment </h3>
+<%= render "comments/form", comment: @comment %>
+
