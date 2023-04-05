@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
   def create
-    @comment = Comment.new(comment_params.merge(article_id: params[:article_id]))
+    @comment = Comment.new(comment_params.merge(article_id: params[:article_id], commenter: current_user.email))
     @article = Article.find(params[:article_id])
 
     if @comment.save
@@ -27,8 +27,6 @@ class CommentsController < ApplicationController
   def comment_show_params
     {
       comment: @comment.comment,
-      comment_err: @comment.errors.full_messages_for(:comment).first,
-      commenter_err: @comment.errors.full_messages_for(:commenter).first
-    }
+      comment_err: @comment.errors.full_messages_for(:comment).first    }
   end
 end
