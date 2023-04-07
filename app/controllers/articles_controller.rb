@@ -1,10 +1,10 @@
 class ArticlesController < ApplicationController
   def index
-    @articles = Article.all
+    @articles = policy_scope(Article)
   end
 
   def show
-    @article = Article.find(params[:id])
+    @article = policy_scope(Article).find(params[:id])
 
     if params.has_key?(:comment)
       @comment = Comment.new(comment: params[:comment], commenter: params[:commenter], article_id: params[:id])
@@ -18,7 +18,7 @@ class ArticlesController < ApplicationController
   end
 
   def create
-    @article = Article.new(article_params)
+    @article = Article.new(article_params.merge(user_id: current_user.id))
 
     if @article.save
 
@@ -54,6 +54,6 @@ class ArticlesController < ApplicationController
   private
 
   def article_params
-    params.require(:article).permit(:title, :body)
+    params.require(:article).permit(:title, :body, :published)
   end
 end

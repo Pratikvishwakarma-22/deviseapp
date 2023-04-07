@@ -75,3 +75,5 @@ end
 
 gem "cssbundling-rails"
 
+
+gem "pundit", "~> 2.3"
