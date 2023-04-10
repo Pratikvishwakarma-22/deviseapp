@@ -1,8 +1,7 @@
 class ArticlesController < ApplicationController
-  load_and_authorize_resource
 
   def index
-    @articles = Article.all
+    @articles = policy_scope(Article)
   end
 
   def show
@@ -10,7 +9,7 @@ class ArticlesController < ApplicationController
 
     if params.has_key?(:comment)
       @comment = Comment.new(comment: params[:comment], commenter: params[:commenter], article_id: params[:id])
-    else
+      else
       @comment = Comment.new(article_id: params[:id])
     end
   end
@@ -20,9 +19,8 @@ class ArticlesController < ApplicationController
 
   def create
     @article = Article.new(article_params.merge(user_id: current_user.id))
-    debugger
+    
     if @article.save
-
       redirect_to(@article)
     else
 
@@ -48,14 +46,23 @@ class ArticlesController < ApplicationController
 
   def destroy
     @article = Article.find(params[:id])
+    authorize @article
     @article.destroy
 
     redirect_to root_path, status: :see_other
   end
 
+  def publish
+    debugger
+    @article = Article.find(params[:article_id])
+    @article.update!(published: true)
+    flash[notice] = "Article has been published successfully"
+    redirect_to articles_path
+  end
+
   private
 
   def article_params
-    params.require(:article).permit(:title, :body)
+    params.require(:article).permit(:title, :body, :published)
   end
 end

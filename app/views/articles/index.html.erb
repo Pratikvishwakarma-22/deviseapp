@@ -1,9 +1,42 @@
 <h1>List of Available Articles</h1>
 
-<% @articles.each do |article| %>
-  <ul>
-    <li><%= link_to article.title, article%></li>
-  </ul>
-<% end %>
+<table>
+  <tr>
+    <th> <%= "Title".ljust(20) %> </th>
+    <th> <%= "Author".ljust(20) %> </th>
+    <th> <%= "Status".ljust(20) %> </th>
+    <th> <%= "Change Status".ljust(20) %> </th>
+    <th> <%= "Remove Article" %> </th>
+  </tr>
 
+  <% @articles.each do |article| %>
+  <tr>
+    <td><%= link_to article.title, article %></td>
+    <td>&nbsp <%= User.find(article.user_id).email %></td>
+
+    <td>
+      <% if article.published %>
+        Published
+      <% else %>
+        Not Published
+      <% end %>
+    </td>
+
+    <td>
+      <% unless article.published %>
+        <%= link_to "Publish Now", article_publish_url(article.id)%>
+      <% end %>
+    </td>
+
+    <td>
+      <% if policy(article).destroy? %>
+        <%= button_to "Delete", article, method: :delete %>
+      <% end %>
+    </td>
+
+  </tr>
+  <% end %>
+
+</table>
+<br>
 <%= link_to "Create New Article", new_article_path %>
