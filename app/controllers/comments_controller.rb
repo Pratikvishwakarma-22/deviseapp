@@ -1,4 +1,6 @@
 class CommentsController < ApplicationController
+  load_and_authorize_resource
+
   def create
     @comment = Comment.new(comment_params.merge(article_id: params[:article_id], commenter: current_user.email))
     @article = Article.find(params[:article_id])
