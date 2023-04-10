@@ -9,9 +9,14 @@ class Ability
 
     can [:create, :update, :delete], Article, user: user
 
+    can :create, Comment
+
+    can :destroy, Comment do |comment|
+      comment.article.user == user
+    end
+
     return unless user.admin?
 
     can :manage, :all
-
   end
 end
