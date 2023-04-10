@@ -1,0 +1,18 @@
+<table>
+	<tr>
+		<th>Article</th>
+		<th>Commenter</th>
+		<th>Comment</th>
+	</tr>
+
+	<% articles.each do |article| %>
+		<% article.comments.each do |comment| %>
+				<tr>
+					<td><%= article.title %><td>
+					<td><%= comment.commenter%></td>
+					<td><%= comment.comment %></td>
+				</tr>
+		<% end %>
+	<% end %>
+</table>
+

@@ -1,0 +1,6 @@
+	<ul>
+    <li>Commenter: <%= comment.commenter %> </li>
+    <li>Comment: <%= comment.comment %> </li>
+  </ul>
+
+  <%= button_to "Delete Comment", comment_path(comment.id,), method: :delete %>
