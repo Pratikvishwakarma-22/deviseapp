@@ -1,5 +1,4 @@
 class ArticlesController < ApplicationController
-  attr_reader :article
 
   def index
     @articles = policy_scope(Article)
@@ -14,14 +13,13 @@ class ArticlesController < ApplicationController
       @comment = Comment.new(article_id: params[:id])
     end
   end
-
   def new
     @article = Article.new
   end
 
   def create
     @article = Article.new(article_params.merge(user_id: current_user.id))
-
+    
     if @article.save
       redirect_to(@article)
     else
@@ -35,6 +33,7 @@ class ArticlesController < ApplicationController
   end
 
   def update
+    debugger
     @article = Article.find(params[:id])
 
     if @article.update(article_params)
