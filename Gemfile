@@ -76,3 +76,5 @@ end
 gem "cssbundling-rails"
 
 gem "cancancan"
+
+gem 'activeadmin'
