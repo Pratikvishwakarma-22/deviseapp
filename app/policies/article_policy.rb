@@ -1,20 +1,20 @@
 
 class ArticlePolicy < ApplicationPolicy
-  class Scope
-    def initialize(user, scope)
-      @user = user
-      @scope = scope
-    end
-
+  class Scope < Scope
     def resolve
       if user.admin?
         scope.all
       else
-        scope.where(published: true)
+        scope.where(user_id: @user.id).or(scope.where(published: true))
       end
     end
+  end
 
-    private
-    attr_reader :user, :scope
+  def update?
+    user.admin? or ((@record.user_id == @user.id) and not @record.published?)
+  end
+
+  def destroy?
+    user.admin? or (@record.user_id ==  @user.id)
   end
 end

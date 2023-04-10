@@ -1,14 +1,16 @@
 class ArticlesController < ApplicationController
+  attr_reader :article
+
   def index
     @articles = policy_scope(Article)
   end
 
   def show
-    @article = policy_scope(Article).find(params[:id])
+    @article = Article.find(params[:id])
 
     if params.has_key?(:comment)
       @comment = Comment.new(comment: params[:comment], commenter: params[:commenter], article_id: params[:id])
-    else
+      else
       @comment = Comment.new(article_id: params[:id])
     end
   end
@@ -21,7 +23,6 @@ class ArticlesController < ApplicationController
     @article = Article.new(article_params.merge(user_id: current_user.id))
 
     if @article.save
-
       redirect_to(@article)
     else
 
@@ -46,9 +47,18 @@ class ArticlesController < ApplicationController
 
   def destroy
     @article = Article.find(params[:id])
+    authorize @article
     @article.destroy
 
     redirect_to root_path, status: :see_other
+  end
+
+  def publish
+    debugger
+    @article = Article.find(params[:article_id])
+    @article.update!(published: true)
+    flash[notice] = "Article has been published successfully"
+    redirect_to articles_path
   end
 
   private

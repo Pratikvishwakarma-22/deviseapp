@@ -8,5 +8,6 @@ Rails.application.routes.draw do
 
   resources :articles do
     resources :comments, shallow: true
+    get "publish"
   end
 end
