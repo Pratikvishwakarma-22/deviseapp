@@ -1,4 +1,6 @@
 class ArticlesController < ApplicationController
+  load_and_authorize_resource
+
   def index
     @articles = Article.all
   end
@@ -12,14 +14,13 @@ class ArticlesController < ApplicationController
       @comment = Comment.new(article_id: params[:id])
     end
   end
-
   def new
     @article = Article.new
   end
 
   def create
-    @article = Article.new(article_params)
-
+    @article = Article.new(article_params.merge(user_id: current_user.id))
+    debugger
     if @article.save
 
       redirect_to(@article)
@@ -34,6 +35,7 @@ class ArticlesController < ApplicationController
   end
 
   def update
+    debugger
     @article = Article.find(params[:id])
 
     if @article.update(article_params)
